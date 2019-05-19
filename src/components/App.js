@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { loginRequest, LOGIN_REQUEST, loginSuccess, loginFail, appMounted } from '../actions/LoginActions'
+import { loginRequest, appMounted } from '../actions/LoginActions'
 import { connect } from 'react-redux';
 
 // const App = ({ getUser }) => (

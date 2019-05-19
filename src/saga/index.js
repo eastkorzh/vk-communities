@@ -1,36 +1,55 @@
-import { put, takeEvery, all, call, select } from 'redux-saga/effects'
-import { loginRequest, loginSuccess, loginFail, appMounted } from '../actions/LoginActions'
+import { put, takeEvery, takeLatest, all, call, select } from 'redux-saga/effects'
+import { 
+	loginRequest,
+	loginSuccess, 
+	loginFail, 
+	appMounted,
+	userGetRequest,
+	userGetSuccess,
+	userGetFail,
+} from '../actions/LoginActions'
+
+import { get } from '../api'
 
 const url = 'https://oauth.vk.com/authorize?client_id=6983001&display=page&redirect_uri=http://localhost:3000//callback&scope=friends&response_type=token&v=5.95&state=123456'
+const homeUrl = 'http://localhost:3000/'
+
+export function requestLink(
+	methodName = 'users.get', 
+	params = 'user_ids=210700286&fields=photo_400',  
+	token = '',
+	v = '5.95')  {
+
+    return `https://api.vk.com/method/${methodName}?${params}&access_token=${token}&v=${v}`
+}
 
 export function* onAppMounted() {
 	let access_token = ''
+	let user_id = ''
+	const state = yield select((state) => state)
+	console.log(state)
 
-	yield call((href) => {
+	if (!state.isLoggedIn) yield call((href) => {
 		const url = new URL(href)
-		const start = url.hash.indexOf('=') + 1
-		const end = url.hash.indexOf('&')
+		const tokenStart = url.hash.indexOf('=') + 1
+		const tokenEnd = url.hash.indexOf('&')
+		const idStart = url.hash.indexOf('_id=') + 4
+		const idEnd = url.hash.indexOf('&state')
 
-		access_token = url.hash.slice(start, end)
+		access_token = url.hash.slice(tokenStart, tokenEnd)
+		user_id = url.hash.slice(idStart, idEnd)
 		
-		if (access_token.length > 50) {
-			put(loginSuccess)
-		}
 	}, window.location.href)
 
 	if (access_token.length > 50) {
-		yield put(loginSuccess(access_token))
+		yield put(loginSuccess(user_id, access_token))
 	} else if (access_token.length !== 0) {
 		yield put(loginFail)
 	}
-
-	const token = yield select((state) => state.access_token)
-
-	yield console.log(token)
 }
 
 export function* watchOnAppMounted() {
-	yield takeEvery(appMounted.type, onAppMounted)
+	yield takeLatest(appMounted.type, onAppMounted)
 }
 
 export function* onLogin() {
@@ -40,12 +59,28 @@ export function* onLogin() {
 }
 
 export function* watchOnLogin() {
-	yield takeEvery(loginRequest.type, onLogin)
+	yield takeLatest(loginRequest.type, onLogin)
+}
+
+export function* usersGet() {
+	const state = yield select((state) => state)
+	const rl = requestLink('users.get', `user_ids=${state.user_id}&fields=photo_400`, state.access_token )
+	
+	yield put(userGetRequest)
+
+	const r = yield get({url: rl}).then((r) => r.response[0])
+
+	yield put(userGetSuccess(r.first_name, r.last_name, r.photo_400))
+}
+
+export function* watchUsersGet() {
+	yield takeLatest(loginSuccess().type, usersGet)
 }
 
 export default function* rootSaga() {
 	yield all([
 		watchOnLogin(),
 		watchOnAppMounted(),
+		watchUsersGet(),
 	])
 }
