@@ -16,6 +16,7 @@ export default function rootReducer(state = {
 	first_name: '',
 	last_name: '',
 	photo_400: '',
+	errors: [],
 }, action) {
 	switch (action.type) {
 		case LOGIN_REQUEST:
@@ -54,6 +55,7 @@ export default function rootReducer(state = {
 			return {
 				...state,
 				isFetching: false,
+				errors: state.errors.push(action.error)
 			}
 		default:
 			return state

@@ -38,6 +38,7 @@ export const userGetSuccess = (first_name, last_name, photo_400 = '') => ({
     photo_400,
 })
 
-export const userGetFail = {
+export const userGetFail = (error) => ({
     type: USER_GET_FAIL,
-}
+    error,
+})
