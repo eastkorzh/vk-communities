@@ -16,11 +16,15 @@ export const loginRequest = {
     type: LOGIN_REQUEST,
 }
 
-export const loginSuccess = (user_id, access_token) => ({
+// export const loginSuccess = (user_id, access_token) => ({
+//     type: LOGIN_SUCCESS,
+//     access_token,
+//     user_id,
+// })
+
+export const loginSuccess = {
     type: LOGIN_SUCCESS,
-    access_token,
-    user_id,
-})
+}
 
 export const loginFail = {
     type: LOGIN_FAIL,
@@ -31,12 +35,16 @@ export const userGetRequest = {
     type: USER_GET_REQUEST,
 }
 
-export const userGetSuccess = (first_name, last_name, photo_400 = '') => ({
+// export const userGetSuccess = (first_name, last_name, photo_400 = '') => ({
+//     type: USER_GET_SUCCESS,
+//     first_name,
+//     last_name,
+//     photo_400,
+// })
+
+export const userGetSuccess = {
     type: USER_GET_SUCCESS,
-    first_name,
-    last_name,
-    photo_400,
-})
+}
 
 export const userGetFail = (error) => ({
     type: USER_GET_FAIL,

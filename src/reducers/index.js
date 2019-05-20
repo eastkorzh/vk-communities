@@ -10,12 +10,12 @@ import {
 
 export default function rootReducer(state = {
 	isFetching: false,
-	isLoggedIn: false,
-	user_id: '',
-	access_token: '',
-	first_name: '',
-	last_name: '',
-	photo_400: '',
+	//isLoggedIn: false,
+	// user_id: '',
+	// access_token: '',
+	// first_name: '',
+	// last_name: '',
+	// photo_400: '',
 	errors: [],
 }, action) {
 	switch (action.type) {
@@ -28,15 +28,15 @@ export default function rootReducer(state = {
 			return {
 				...state,
 				isFetching: false,
-				isLoggedIn: true,
-				user_id: action.user_id,
-				access_token: action.access_token,
+				//isLoggedIn: true,
+				// user_id: action.user_id,
+				// access_token: action.access_token,
 			}
 		case LOGIN_FAIL:
 			return {
 				...state,
 				isFetching: false,
-				isLoggedIn: false,
+				//isLoggedIn: false,
 			}
 		case USER_GET_REQUEST:
 			return {
@@ -47,9 +47,9 @@ export default function rootReducer(state = {
 			return {
 				...state,
 				isFetching: false,
-				first_name: action.first_name,
-				last_name: action.last_name,
-				photo_400: action.photo_400,
+				// first_name: action.first_name,
+				// last_name: action.last_name,
+				// photo_400: action.photo_400,
 			}
 		case USER_GET_FAIL:
 			return {

@@ -3,11 +3,14 @@ import { connect } from 'react-redux'
 
 import { loginRequest, loginButtonMounted } from '../actions/LoginActions'
 import LoginButton from '../components/LoginButton'
+import ProfileCard from '../components/ProfileCard'
+
+//localStorage.setItem('isLoggedIn', false)
 
 class App extends React.Component {
 	componentDidUpdate() {
-		//const { state } = this.props
-		//console.log(state)
+		
+		console.log(localStorage.isLoggedIn)
 	}
 
 	render() {
@@ -15,11 +18,16 @@ class App extends React.Component {
 
 		return (
 			<div>
-				{!state.isLoggedIn &&
+				{localStorage.isLoggedIn === 'false' &&
 					<LoginButton 
 						state={state} 
 						onLogin={onLogin}
 						setLoginButtonMounted={setLoginButtonMounted}
+					/>
+				}
+				{localStorage.isLoggedIn === 'true' &&
+					<ProfileCard 
+						state={state} 
 					/>
 				}
 			</div>

@@ -11,10 +11,9 @@ import {
 
 import { get } from '../api'
 
-const url = 'https://oauth.vk.com/authorize?client_id=6983001&display=page&redirect_uri=http://localhost:3000//callback&scope=friends&response_type=token&v=5.95&state=123456'
-//const homeUrl = 'http://localhost:3000/'
+const homeUrl = 'http://localhost:3000/'
+const url = `https://oauth.vk.com/authorize?client_id=6983001&display=page&redirect_uri=${homeUrl}//callback&scope=friends&response_type=token&v=5.95&state=123456`
 const error500 = '500 Shit happens'
-
 
 export function requestLink(
 	methodName = 'users.get', 
@@ -25,36 +24,37 @@ export function requestLink(
     return `https://api.vk.com/method/${methodName}?${params}&access_token=${token}&v=${v}`
 }
 
-export function* onLoginAppMounted() {
-	const state = yield select((state) => state)
-	console.log(state)
-	
-	if (!state.isLoggedIn) { 
-		let access_token = ''
-		let user_id = ''
+export function* onLoginButtonMounted() {
+	let access_token = ''
+	let user_id = ''
 
-		yield call((href) => {
-			const url = new URL(href)
-			const tokenStart = url.hash.indexOf('=') + 1
-			const tokenEnd = url.hash.indexOf('&')
-			const idStart = url.hash.indexOf('_id=') + 4
-			const idEnd = url.hash.indexOf('&state')
+	yield call((href) => {
+		const url = new URL(href)
+		const tokenStart = url.hash.indexOf('=') + 1
+		const tokenEnd = url.hash.indexOf('&')
+		const idStart = url.hash.indexOf('_id=') + 4
+		const idEnd = url.hash.indexOf('&state')
 
-			access_token = url.hash.slice(tokenStart, tokenEnd)
-			user_id = url.hash.slice(idStart, idEnd)
+		access_token = url.hash.slice(tokenStart, tokenEnd)
+		user_id = url.hash.slice(idStart, idEnd)
 			
-			}, window.location.href)
+		}, window.location.href)
 
-			if (access_token.length > 50) {
-				yield put(loginSuccess(user_id, access_token))
-			} else if (access_token.length !== 0) {
-				yield put(loginFail)
-			}
-	}
+		if (access_token.length > 50) {
+			yield call(() => {
+				localStorage.setItem('user_id', user_id)
+				localStorage.setItem('access_token', access_token)
+				localStorage.setItem('isLoggedIn', true)
+			})
+			yield put(loginSuccess)
+		} else if (access_token.length !== 0) {
+			yield localStorage.setItem('isLoggedIn', false)
+			yield put(loginFail)
+		}
 }
 
 export function* watchOnLoginButtonMounted() {
-	yield takeLatest(loginButtonMounted.type, onLoginAppMounted)
+	yield takeLatest(loginButtonMounted.type, onLoginButtonMounted)
 }
 
 export function* onLogin() {
@@ -68,8 +68,8 @@ export function* watchOnLogin() {
 }
 
 export function* usersGet() {
-	const state = yield select((state) => state)
-	const rl = requestLink('users.get', `user_ids=${state.user_id}&fields=photo_400`, state.access_token )
+	//const state = yield select((state) => state)
+	const rl = requestLink('users.get', `user_ids=${localStorage.user_id}&fields=photo_400`, localStorage.access_token )
 	
 	yield put(userGetRequest)	
 	
@@ -78,8 +78,13 @@ export function* usersGet() {
 		const { id } = r
 
 		if (id) {
-			yield put(userGetSuccess(r.first_name, r.last_name, r.photo_400))
-			//window.location.replace(homeUrl)
+			yield call(() => {
+				localStorage.setItem('first_name', r.first_name)
+				localStorage.setItem('last_name', r.last_name)
+				localStorage.setItem('photo_400', r.photo_400)
+			})
+			yield put(userGetSuccess)
+			window.location.replace(homeUrl)
 		} else {
 			throw new Error(error500)
 		}
@@ -89,7 +94,7 @@ export function* usersGet() {
 }
 
 export function* watchUsersGet() {
-	yield takeLatest(loginSuccess().type, usersGet)
+	yield takeLatest(loginSuccess.type, usersGet)
 }
 
 export default function* rootSaga() {
