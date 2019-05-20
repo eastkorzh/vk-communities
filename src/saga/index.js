@@ -3,7 +3,7 @@ import {
 	loginRequest,
 	loginSuccess, 
 	loginFail, 
-	appMounted,
+	loginButtonMounted,
 	userGetRequest,
 	userGetSuccess,
 	userGetFail,
@@ -25,7 +25,7 @@ export function requestLink(
     return `https://api.vk.com/method/${methodName}?${params}&access_token=${token}&v=${v}`
 }
 
-export function* onAppMounted() {
+export function* onLoginAppMounted() {
 	const state = yield select((state) => state)
 	console.log(state)
 	
@@ -53,8 +53,8 @@ export function* onAppMounted() {
 	}
 }
 
-export function* watchOnAppMounted() {
-	yield takeLatest(appMounted.type, onAppMounted)
+export function* watchOnLoginButtonMounted() {
+	yield takeLatest(loginButtonMounted.type, onLoginAppMounted)
 }
 
 export function* onLogin() {
@@ -95,7 +95,7 @@ export function* watchUsersGet() {
 export default function* rootSaga() {
 	yield all([
 		watchOnLogin(),
-		watchOnAppMounted(),
+		watchOnLoginButtonMounted(),
 		watchUsersGet(),
 	])
 }

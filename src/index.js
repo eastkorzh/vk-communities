@@ -5,7 +5,7 @@ import { Provider } from 'react-redux'
 import createSagaMiddleware from 'redux-saga'
 import { createLogger } from 'redux-logger'
 
-import App from './components/App'
+import App from './containers/App'
 import rootReducer from './reducers'
 import rootSaga from './saga'
 

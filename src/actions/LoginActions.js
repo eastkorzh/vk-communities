@@ -1,15 +1,15 @@
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGIN_FAIL = 'LOGIN_FAIL'
-export const APP_MOUNTED = 'APP_MOUNTED'
+export const LOGIN_APP_MOUNTED = 'LOGIN_APP_MOUNTED'
 
 export const USER_GET_REQUEST = 'USER_GET_REQUEST'
 export const USER_GET_SUCCESS = 'USER_GET_SUCCESS'
 export const USER_GET_FAIL = 'USER_GET_FAIL'
 
 
-export const appMounted = {
-    type: APP_MOUNTED,
+export const loginButtonMounted = {
+    type: LOGIN_APP_MOUNTED,
 }
 
 export const loginRequest = {
