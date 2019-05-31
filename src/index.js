@@ -7,7 +7,9 @@ import { createLogger } from 'redux-logger'
 
 import App from './containers/App'
 import rootReducer from './reducers'
-import rootSaga from './saga'
+import rootSaga from './rootSaga'
+import './styles/index.sass'
+import './styles/toggle2.css'
 
 
 const sagaMiddleware = createSagaMiddleware()

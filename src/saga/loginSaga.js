@@ -1,4 +1,4 @@
-import { put, takeLatest, all, call, select } from 'redux-saga/effects'
+import { put, takeLatest, all, call } from 'redux-saga/effects'
 import { 
 	loginRequest,
 	loginSuccess, 
@@ -14,6 +14,8 @@ import { get } from '../api'
 const homeUrl = 'http://localhost:3000/'
 const url = `https://oauth.vk.com/authorize?client_id=6983001&display=page&redirect_uri=${homeUrl}//callback&scope=friends&response_type=token&v=5.95&state=123456`
 const error500 = '500 Shit happens'
+
+//localStorage.setItem('isLoggedIn', false)
 
 export function requestLink(
 	methodName = 'users.get', 
@@ -68,7 +70,6 @@ export function* watchOnLogin() {
 }
 
 export function* usersGet() {
-	//const state = yield select((state) => state)
 	const rl = requestLink('users.get', `user_ids=${localStorage.user_id}&fields=photo_400`, localStorage.access_token )
 	
 	yield put(userGetRequest)	
@@ -83,9 +84,10 @@ export function* usersGet() {
 				localStorage.setItem('last_name', r.last_name)
 				localStorage.setItem('photo_400', r.photo_400)
 			})
-			yield put(userGetSuccess)
 			window.location.replace(homeUrl)
+			yield put(userGetSuccess)
 		} else {
+			yield localStorage.setItem('isLoggedIn', false)
 			throw new Error(error500)
 		}
 	} catch (error) {
@@ -97,7 +99,7 @@ export function* watchUsersGet() {
 	yield takeLatest(loginSuccess.type, usersGet)
 }
 
-export default function* rootSaga() {
+export default function* loginSaga() {
 	yield all([
 		watchOnLogin(),
 		watchOnLoginButtonMounted(),

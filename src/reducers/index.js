@@ -8,15 +8,16 @@ import {
 	
  } from "../actions/LoginActions";
 
+import {
+	COMMUNITIES_GET_REQUEST,
+	COMMUNITIES_GET_SUCCESS,
+	COMMUNITIES_GET_FAIL,
+} from '../actions/communitiesActions'
+
 export default function rootReducer(state = {
 	isFetching: false,
-	//isLoggedIn: false,
-	// user_id: '',
-	// access_token: '',
-	// first_name: '',
-	// last_name: '',
-	// photo_400: '',
 	errors: [],
+	communities: [],
 }, action) {
 	switch (action.type) {
 		case LOGIN_REQUEST:
@@ -28,15 +29,11 @@ export default function rootReducer(state = {
 			return {
 				...state,
 				isFetching: false,
-				//isLoggedIn: true,
-				// user_id: action.user_id,
-				// access_token: action.access_token,
 			}
 		case LOGIN_FAIL:
 			return {
 				...state,
 				isFetching: false,
-				//isLoggedIn: false,
 			}
 		case USER_GET_REQUEST:
 			return {
@@ -47,11 +44,25 @@ export default function rootReducer(state = {
 			return {
 				...state,
 				isFetching: false,
-				// first_name: action.first_name,
-				// last_name: action.last_name,
-				// photo_400: action.photo_400,
 			}
 		case USER_GET_FAIL:
+			return {
+				...state,
+				isFetching: false,
+				errors: state.errors.push(action.error)
+			}
+		case COMMUNITIES_GET_REQUEST:
+			return {
+				...state,
+				isFetching: true,
+			}
+		case COMMUNITIES_GET_SUCCESS:
+			return {
+				...state,
+				isFetching: false,
+				communities: action.response.items
+			}
+		case COMMUNITIES_GET_FAIL:
 			return {
 				...state,
 				isFetching: false,

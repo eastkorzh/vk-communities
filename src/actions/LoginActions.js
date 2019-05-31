@@ -1,7 +1,7 @@
 export const LOGIN_REQUEST = 'LOGIN_REQUEST'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGIN_FAIL = 'LOGIN_FAIL'
-export const LOGIN_APP_MOUNTED = 'LOGIN_APP_MOUNTED'
+export const LOGIN_BUTTON_MOUNTED = 'LOGIN_BUTTON_MOUNTED'
 
 export const USER_GET_REQUEST = 'USER_GET_REQUEST'
 export const USER_GET_SUCCESS = 'USER_GET_SUCCESS'
@@ -9,18 +9,12 @@ export const USER_GET_FAIL = 'USER_GET_FAIL'
 
 
 export const loginButtonMounted = {
-    type: LOGIN_APP_MOUNTED,
+    type: LOGIN_BUTTON_MOUNTED,
 }
 
 export const loginRequest = {
     type: LOGIN_REQUEST,
 }
-
-// export const loginSuccess = (user_id, access_token) => ({
-//     type: LOGIN_SUCCESS,
-//     access_token,
-//     user_id,
-// })
 
 export const loginSuccess = {
     type: LOGIN_SUCCESS,
@@ -34,13 +28,6 @@ export const loginFail = {
 export const userGetRequest = {
     type: USER_GET_REQUEST,
 }
-
-// export const userGetSuccess = (first_name, last_name, photo_400 = '') => ({
-//     type: USER_GET_SUCCESS,
-//     first_name,
-//     last_name,
-//     photo_400,
-// })
 
 export const userGetSuccess = {
     type: USER_GET_SUCCESS,
