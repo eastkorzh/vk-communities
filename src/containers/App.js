@@ -62,7 +62,19 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-	onLogin: () => dispatch(loginRequest),
+	//onLogin: () => dispatch(loginRequest),
+	onLogin: () => {
+		// eslint-disable-next-line no-undef
+		VK.Auth.login(r => {
+			if (r.session){
+				console.log('success')
+			}else{
+				console.log('failed')
+			}
+		}, 8194);
+		
+		dispatch(loginRequest)
+	},
 
 	setLoginButtonMounted: () => dispatch(loginButtonMounted),
 

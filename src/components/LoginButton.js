@@ -6,6 +6,8 @@ export default class LoginButton extends React.Component {
 		setLoginButtonMounted()
 	}
 
+	
+
 	render() {
 		const { onLogin } = this.props
 

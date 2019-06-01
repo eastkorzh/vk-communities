@@ -14,7 +14,7 @@ function* renderCommunities() {
 	try {
 		const url = requestUrl({ methodName: 'groups.get', params: 'extended=1&count=999&fields=is_hidden_from_feed'})
 		const r = yield get({ url: url}).then(r => r.response)
-
+		console.log('url1', url)
 		if (r) {
 			yield put(communitiesGetSuccess(r))
 		} else {
@@ -33,16 +33,17 @@ function* watchRenderCommunities() {
 
 function* onDisableCommunitieRequest(action) {
 	try {
-		console.log(action.id)
 		const id = action.id
-		const url = requestUrl({ methodName: 'newsfeed.addBan', params: `${id}`})
+		const url = requestUrl({ methodName: 'newsfeed.addBan', params: `group_ids=${id}`})
+		console.log('url', url)
 		const r = yield get({ url: url})
 
 		if (!r.error) {
 			yield put(disableCommunitieSuccess(r))
 			console.log(r)
 		} else {
-			throw new Error('Disable communitie error')
+			console.log(r)
+			throw new Error(r)
 		}
 	} catch (error) {
 		yield put(disableCommunitieFail(error))

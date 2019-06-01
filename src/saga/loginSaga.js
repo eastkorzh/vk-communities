@@ -12,7 +12,7 @@ import {
 import { get } from '../api'
 
 const homeUrl = 'http://localhost:3000/'
-const url = `https://oauth.vk.com/authorize?client_id=6983001&display=page&redirect_uri=${homeUrl}//callback&scope=friends&response_type=token&v=5.95&state=123456`
+const url = `https://oauth.vk.com/authorize?client_id=6983001&display=page&redirect_uri=${homeUrl}//callback&scope=friends,stories,groups,wall&response_type=token&v=5.95&state=123456`
 const error500 = '500 Shit happens'
 
 //localStorage.setItem('isLoggedIn', false)
