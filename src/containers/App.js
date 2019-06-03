@@ -1,14 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Route } from 'react-router-dom'
 
 import { 
 	loginRequest, 
 	loginButtonMounted,
-	 } from '../actions/LoginActions'
-import { communitiesGetRequest, disableCommunitieRequest } from '../actions/communitiesActions'
+} from '../actions/LoginActions'
+import { communitiesGetRequest, wallGetRequest } from '../actions/communitiesActions'
 import LoginButton from '../components/LoginButton'
 import ProfileCard from '../components/ProfileCard'
 import Communities from '../components/Communities'
+import Wall from '../components/Wall'
 
 //localStorage.setItem('isLoggedIn', false)
 
@@ -29,7 +31,8 @@ class App extends React.Component {
 			state, 
 			onLogin, 
 			setLoginButtonMounted,
-			disableCommunitieRequest } = this.props
+			wallGetRequest,
+		} = this.props
 
 		return (
 			<div>
@@ -46,11 +49,19 @@ class App extends React.Component {
 					/>
 				}
 				{localStorage.isLoggedIn === 'true' &&
-					<Communities
-						state={state}
-						disableCommunitieRequest={disableCommunitieRequest} 
+					<Route exact path='/' render={
+						() => <Communities
+							state={state}
+							wallGetRequest={wallGetRequest}
+						/>}
 					/>
 				}
+				<Route path='/wall' render={
+					() => <Wall 
+						state={state}
+						wallGetRequest={wallGetRequest}
+					/>
+				} />
 			</div>
 		)
 	}
@@ -68,7 +79,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 	communitiesGetRequest: () => dispatch(communitiesGetRequest),
 
-	disableCommunitieRequest: (id) => dispatch(disableCommunitieRequest(id)),
+	wallGetRequest: (name) => dispatch(wallGetRequest(name)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
