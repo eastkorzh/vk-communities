@@ -21,9 +21,6 @@ export const communitiesGetFail = (errors) => ({
 })
 
 
-// export const disableCommunitieRequest = {
-//     type: DISABLE_COMMUNITIE_REQUEST,
-// }
 export const disableCommunitieRequest = (id) => ({
     type: DISABLE_COMMUNITIE_REQUEST,
     id,

@@ -7,23 +7,39 @@ import {
 	disableCommunitieRequest, 
 	disableCommunitieSuccess, 
 	disableCommunitieFail } from '../actions/communitiesActions'
-import { get } from '../api'
+import { get, apiCall } from '../api'
 import requestUrl from '../api/urls'
 
 function* renderCommunities() {
-	try {
-		const url = requestUrl({ methodName: 'groups.get', params: 'extended=1&count=999&fields=is_hidden_from_feed'})
-		const r = yield get({ url: url}).then(r => r.response)
-		console.log('url1', url)
-		if (r) {
-			yield put(communitiesGetSuccess(r))
-		} else {
-			throw new Error('Groups get error')
-		}
-	} catch (error) {
-		yield put(communitiesGetFail(error))
-		yield localStorage.isLoggedIn = 'false'
-	}
+    try {
+        const r = yield apiCall({ 
+            method: 'groups.get', 
+            params: {extended: 1, count: 999, fields: 'activity,members_count'} 
+        })
+        console.log(r)
+        
+        if (!r.error) {
+            yield put(communitiesGetSuccess(r.response))
+        } else {
+            throw new Error(r.error.error_msg)
+        }
+    } catch (error) {
+        yield put(communitiesGetFail(error))
+        yield localStorage.isLoggedIn = 'false'
+    }
+	// try {
+	// 	const url = requestUrl({ methodName: 'groups.get', params: 'extended=1&count=999&fields=is_hidden_from_feed'})
+	// 	const r = yield get({ url: url}).then(r => r.response)
+	// 	console.log('url1', url)
+	// 	if (r) {
+	// 		yield put(communitiesGetSuccess(r))
+	// 	} else {
+	// 		throw new Error('Groups get error')
+	// 	}
+	// } catch (error) {
+	// 	yield put(communitiesGetFail(error))
+	// 	yield localStorage.isLoggedIn = 'false'
+	// }
 }
 
 function* watchRenderCommunities() {

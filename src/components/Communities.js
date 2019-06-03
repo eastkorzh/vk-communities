@@ -7,21 +7,12 @@ class Communities extends React.Component {
 
         return communities.map(item => (
             <div key={item.id}>
-                <img src={item.photo_100} alt={`${item.name}`}/>
+                <a href={`https://vk.com/${item.screen_name}`}>
+                    <img src={item.photo_100} alt={`${item.name}`}/>
+                </a>
                 <div>{item.name}</div>
-                <div className="onoffswitch">
-                    <input
-                        onChange={() => disableCommunitieRequest(item.id)}
-                        type="checkbox"
-                        className="onoffswitch onoffswitch-checkbox"
-                        id={`myonoffswitch${item.id}`}
-                        checked={!item.is_hidden_from_feed}
-                    />
-                    <label className="onoffswitch-label" htmlFor={`myonoffswitch${item.id}`}>
-                        <span className="onoffswitch-inner"></span>
-                        <span className="onoffswitch-switch"></span>
-                    </label>
-                </div>
+                <div>{item.activity}</div>
+                <div>{item.members_count}</div>
             </div>
         ))
     }

@@ -34,3 +34,17 @@ export const post = async ({
 
   return await response.json();
 }
+
+export const apiCall = ({ 
+  method,
+  params,
+}) => {
+  const promise = () => new Promise((resolve, reject) => {
+    // eslint-disable-next-line no-undef
+    VK.Api.call(method, { v:'5.95', ...params}, r => resolve(r) )
+  })
+
+  return promise().then(
+    response => response
+  )
+}

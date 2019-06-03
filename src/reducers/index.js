@@ -49,7 +49,7 @@ export default function rootReducer(state = {
 			return {
 				...state,
 				isFetching: false,
-				errors: state.errors.push(action.error)
+				//errors: state.errors.concat(action.error)
 			}
 		case COMMUNITIES_GET_REQUEST:
 			return {
@@ -66,7 +66,7 @@ export default function rootReducer(state = {
 			return {
 				...state,
 				isFetching: false,
-				errors: state.errors.push(action.error)
+				//errors: state.errors.concat(action.error)
 			}
 		default:
 			return state

@@ -3,92 +3,98 @@ import {
 	loginRequest,
 	loginSuccess, 
 	loginFail, 
-	loginButtonMounted,
 	userGetRequest,
 	userGetSuccess,
 	userGetFail,
 } from '../actions/LoginActions'
 
-import { get } from '../api'
-
-const homeUrl = 'http://localhost:3000/'
-const url = `https://oauth.vk.com/authorize?client_id=6983001&display=page&redirect_uri=${homeUrl}//callback&scope=friends,stories,groups,wall&response_type=token&v=5.95&state=123456`
-const error500 = '500 Shit happens'
-
-//localStorage.setItem('isLoggedIn', false)
-
-export function requestLink(
-	methodName = 'users.get', 
-	params = 'user_ids=210700286&fields=photo_400',  
-	token = '',
-	v = '5.95')  {
-
-    return `https://api.vk.com/method/${methodName}?${params}&access_token=${token}&v=${v}`
-}
-
-export function* onLoginButtonMounted() {
-	let access_token = ''
-	let user_id = ''
-
-	yield call((href) => {
-		const url = new URL(href)
-		const tokenStart = url.hash.indexOf('=') + 1
-		const tokenEnd = url.hash.indexOf('&')
-		const idStart = url.hash.indexOf('_id=') + 4
-		const idEnd = url.hash.indexOf('&state')
-
-		access_token = url.hash.slice(tokenStart, tokenEnd)
-		user_id = url.hash.slice(idStart, idEnd)
-			
-		}, window.location.href)
-
-		if (access_token.length > 50) {
-			yield call(() => {
-				localStorage.setItem('user_id', user_id)
-				localStorage.setItem('access_token', access_token)
-				localStorage.setItem('isLoggedIn', true)
-			})
-			yield put(loginSuccess)
-		} else if (access_token.length !== 0) {
-			yield localStorage.setItem('isLoggedIn', false)
-			yield put(loginFail)
-		}
-}
-
-export function* watchOnLoginButtonMounted() {
-	yield takeLatest(loginButtonMounted.type, onLoginButtonMounted)
-}
+import { apiCall } from '../api'
 
 export function* onLogin() {
-	yield call((url) => {
-		window.location.replace(url)
-	}, url)
+	const login = () => {
+		const loginRequest = () => (
+			new Promise((resolve, reject) => {
+				// eslint-disable-next-line no-undef
+				VK.Auth.login((response) => {
+					if (response.session) {
+						resolve(response)
+					} else {
+						reject(response)
+					}
+				}, 8192)
+			})
+		)
+
+		return loginRequest().then(
+			response => response
+		)
+	}
+
+	// const logout = () => {
+	// 	const logoutRequest = () => (
+	// 		new Promise((resolve, reject) => {
+	// 			// eslint-disable-next-line no-undef
+	// 			VK.Auth.logout((response) => {
+	// 				if (response.session) {
+	// 					resolve(response)
+	// 				} else {
+	// 					reject(response)
+	// 				}
+	// 			})
+	// 		})
+	// 	)
+
+	// 	return logoutRequest().then(
+	// 		response => response
+	// 	)
+	// }
+
+	try {
+		let r = ''
+		if (localStorage.isLoggedIn === 'false' || !localStorage.isLoggedIn) {
+			r = yield login()
+		} else {
+			// yield logout()
+			localStorage.isLoggedIn = 'false'
+		}
+
+		if (r.session) {
+			localStorage.isLoggedIn = 'true'
+			localStorage.id = r.session.user.id
+			
+			yield put(loginSuccess)
+		} else {
+			throw new Error(r.error)
+		}
+	} catch (error) {
+		yield put(loginFail)
+	}
 }
 
 export function* watchOnLogin() {
 	yield takeLatest(loginRequest.type, onLogin)
 }
 
-export function* usersGet() {
-	const rl = requestLink('users.get', `user_ids=${localStorage.user_id}&fields=photo_400`, localStorage.access_token )
-	
-	yield put(userGetRequest)	
-	
-	try {
-		const r = yield get({url: rl}).then((r) => r.response[0])
-		const { id } = r
 
-		if (id) {
-			yield call(() => {
-				localStorage.setItem('first_name', r.first_name)
-				localStorage.setItem('last_name', r.last_name)
-				localStorage.setItem('photo_400', r.photo_400)
+export function* usersGet() {
+	try {
+		yield put(userGetRequest)
+
+		const r = yield apiCall({ 
+			method: 'users.get', 
+			params: {
+				user_ids: localStorage.id, 
+				fields: 'photo_200', 
+				v:"5.95"}
 			})
-			window.location.replace(homeUrl)
+		
+		if (r.response) {
+			localStorage.photo = r.response[0].photo_200
+			localStorage.first_name = r.response[0].first_name
+			localStorage.last_name = r.response[0].last_name
 			yield put(userGetSuccess)
 		} else {
-			yield localStorage.setItem('isLoggedIn', false)
-			throw new Error(error500)
+			throw new Error(r.error)
 		}
 	} catch (error) {
 		yield put(userGetFail(error))
@@ -99,10 +105,10 @@ export function* watchUsersGet() {
 	yield takeLatest(loginSuccess.type, usersGet)
 }
 
+
 export default function* loginSaga() {
 	yield all([
 		watchOnLogin(),
-		watchOnLoginButtonMounted(),
 		watchUsersGet(),
 	])
 }
