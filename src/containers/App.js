@@ -1,14 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Route } from 'react-router-dom'
 
 import { 
 	loginRequest, 
 	loginButtonMounted,
-	 } from '../actions/LoginActions'
-import { communitiesGetRequest, disableCommunitieRequest } from '../actions/communitiesActions'
+} from '../actions/LoginActions'
+import { communitiesGetRequest, wallGetRequest } from '../actions/communitiesActions'
 import LoginButton from '../components/LoginButton'
 import ProfileCard from '../components/ProfileCard'
 import Communities from '../components/Communities'
+import Wall from '../components/Wall'
 
 //localStorage.setItem('isLoggedIn', false)
 
@@ -21,36 +23,45 @@ class App extends React.Component {
 		}
 	}
 	
-	componentDidUpdate() {
-	}
 
 	render() {
 		const { 
 			state, 
 			onLogin, 
 			setLoginButtonMounted,
-			disableCommunitieRequest } = this.props
+			wallGetRequest,
+		} = this.props
 
 		return (
-			<div>
-				{(localStorage.isLoggedIn === 'false' || !localStorage.isLoggedIn) &&
+			<div className='app-grid'>
+				<div className='logged-user'>
+					{localStorage.isLoggedIn === 'true' &&
+						<ProfileCard 
+							state={localStorage} 
+						/>
+					}
 					<LoginButton 
 						state={state} 
 						onLogin={onLogin}
 						setLoginButtonMounted={setLoginButtonMounted}
 					/>
-				}
-				{localStorage.isLoggedIn === 'true' &&
-					<ProfileCard 
-						state={localStorage} 
-					/>
-				}
-				{localStorage.isLoggedIn === 'true' &&
-					<Communities
-						state={state}
-						disableCommunitieRequest={disableCommunitieRequest} 
-					/>
-				}
+				</div>
+				<div className='groups-grid'>
+					{localStorage.isLoggedIn === 'true' &&
+						<Route exact path='/' render={
+							() => <Communities
+								state={state}
+								wallGetRequest={wallGetRequest}
+							/>}
+						/>
+					}
+				</div>
+					<Route path='/wall' render={
+						() => <Wall 
+							state={state}
+							wallGetRequest={wallGetRequest}
+						/>
+					} />
 			</div>
 		)
 	}
@@ -62,25 +73,13 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-	//onLogin: () => dispatch(loginRequest),
-	onLogin: () => {
-		// eslint-disable-next-line no-undef
-		VK.Auth.login(r => {
-			if (r.session){
-				console.log('success')
-			}else{
-				console.log('failed')
-			}
-		}, 8194);
-		
-		dispatch(loginRequest)
-	},
+	onLogin: () => dispatch(loginRequest),
 
 	setLoginButtonMounted: () => dispatch(loginButtonMounted),
 
 	communitiesGetRequest: () => dispatch(communitiesGetRequest),
 
-	disableCommunitieRequest: (id) => dispatch(disableCommunitieRequest(id)),
+	wallGetRequest: (name) => dispatch(wallGetRequest(name)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
