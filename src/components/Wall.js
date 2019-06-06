@@ -15,8 +15,8 @@ class Wall extends React.Component {
 
         const takePhoto = (item) => {
             if (!item.attachments) return
-            if (item.attachments[0].type === 'photo') {
-                return <img src={item.attachments[0].photo.sizes[0].url} alt=''/>
+            if (item.attachments[0].type === 'photo' && item.attachments[0].photo.sizes[4]) {
+                return <img src={item.attachments[0].photo.sizes[4].url} alt='' className='post-img'/>
             }
         }
 
@@ -24,12 +24,14 @@ class Wall extends React.Component {
             return new Date(ms).toLocaleString()
         }
 
-        if (state.posts[0]) {
+        if (!state.isFatching && state.posts[0]) {
             return state.posts.map(item => (
                 <div key={item.id} className='wall-post'>
-                    <div>{takeDate(item.date*1000)}</div>
-                    <div>{item.text}</div>
-                    <div>{takePhoto(item)}</div>
+                    <div className='post-date'>{takeDate(item.date*1000)}</div>
+                    <div className='post-text'>{item.text}</div>
+                    <div className='post-img-div'>
+                        {takePhoto(item)}
+                    </div>
                     <div className='post-info'>
                         <div>
                             <div className='like-svg'/>
@@ -39,10 +41,12 @@ class Wall extends React.Component {
                             <div className='reposts-svg'/>
                             <div>{item.reposts.count}</div>
                         </div>
-                        <div>
+                        {item.views &&
+                        <div className='views'>
                             <div className='view-svg'/>
                             <div>{item.views.count}</div>
                         </div>
+                        }
                     </div>
                 </div>
             ))

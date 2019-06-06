@@ -23,7 +23,7 @@ export function* onLogin() {
 					} else {
 						reject(response)
 					}
-				}, 8192)
+				}, 262144)
 			})
 		)
 

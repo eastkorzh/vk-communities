@@ -36,7 +36,7 @@ function* onWallGetRequest(action) {
     try {
         const r = yield apiCall({ 
             method: 'wall.get', 
-            params: {domain: action.name, count: 10, extended: 1} 
+            params: {domain: action.name, count: 20, extended: 1} 
         })
         
         if (!r.error) {
