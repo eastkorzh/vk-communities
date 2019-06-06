@@ -1,10 +1,12 @@
 import React from 'react'
+import './ProfileCard.sass'
 
 const ProfileCard = ({ state }) => (
-    <div>
-        <img src={state.photo} alt='Profile'/>
+    <div className='profile-card'>
         <p>{state.first_name}</p>
-        <p>{state.last_name}</p>
+        <a href={`https://vk.com/id${localStorage.id}`}>
+            <img src={state.photo} alt='Profile'/>
+        </a>
     </div>
 )
 

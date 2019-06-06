@@ -8,6 +8,8 @@ import {
 	userGetFail,
 } from '../actions/LoginActions'
 
+import { communitiesGetRequest } from '../actions/communitiesActions'
+
 import { apiCall } from '../api'
 
 export function* onLogin() {
@@ -93,6 +95,7 @@ export function* usersGet() {
 			localStorage.first_name = r.response[0].first_name
 			localStorage.last_name = r.response[0].last_name
 			yield put(userGetSuccess)
+			yield put(communitiesGetRequest)
 		} else {
 			throw new Error(r.error)
 		}

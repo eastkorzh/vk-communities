@@ -10,8 +10,6 @@ import App from './containers/App'
 import rootReducer from './reducers'
 import rootSaga from './rootSaga'
 import './styles/index.sass'
-import './styles/toggle2.css'
-
 
 const sagaMiddleware = createSagaMiddleware()
 const loggerMiddleware = createLogger()
@@ -22,7 +20,6 @@ const store = createStore(
 )
 
 sagaMiddleware.run(rootSaga)
-// const action = type => store.dispatch({type})
 
 ReactDOM.render(
     <Router>

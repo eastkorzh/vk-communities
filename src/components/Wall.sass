@@ -1,0 +1,30 @@
+.wall-grid
+    grid-column-start: 2
+    grid-column-end: 3
+    display: grid
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))
+    .wall-post
+        display: flex
+        flex-direction: column
+    .post-info
+        display: flex
+        flex-direction: row
+        div
+            display: flex
+            flex-direction: row
+            //padding-right: 10px
+            font-size: 14px
+            color: #67707a
+            font-weight: 500
+    .like-svg
+        background: url(../svg/like_outline_24.svg) no-repeat
+        width: 24px
+        height: 24px
+    .reposts-svg
+        background: url(../svg/comment_outline_24.svg) no-repeat
+        width: 24px
+        height: 24px
+    .view-svg
+        background: url(../svg/view_24.svg) no-repeat
+        width: 24px
+        height: 24px

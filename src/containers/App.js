@@ -23,8 +23,6 @@ class App extends React.Component {
 		}
 	}
 	
-	componentDidUpdate() {
-	}
 
 	render() {
 		const { 
@@ -35,33 +33,35 @@ class App extends React.Component {
 		} = this.props
 
 		return (
-			<div>
-				{//(localStorage.isLoggedIn === 'false' || !localStorage.isLoggedIn) &&
+			<div className='app-grid'>
+				<div className='logged-user'>
+					{localStorage.isLoggedIn === 'true' &&
+						<ProfileCard 
+							state={localStorage} 
+						/>
+					}
 					<LoginButton 
 						state={state} 
 						onLogin={onLogin}
 						setLoginButtonMounted={setLoginButtonMounted}
 					/>
-				}
-				{localStorage.isLoggedIn === 'true' &&
-					<ProfileCard 
-						state={localStorage} 
-					/>
-				}
-				{localStorage.isLoggedIn === 'true' &&
-					<Route exact path='/' render={
-						() => <Communities
+				</div>
+				<div className='groups-grid'>
+					{localStorage.isLoggedIn === 'true' &&
+						<Route exact path='/' render={
+							() => <Communities
+								state={state}
+								wallGetRequest={wallGetRequest}
+							/>}
+						/>
+					}
+				</div>
+					<Route path='/wall' render={
+						() => <Wall 
 							state={state}
 							wallGetRequest={wallGetRequest}
-						/>}
-					/>
-				}
-				<Route path='/wall' render={
-					() => <Wall 
-						state={state}
-						wallGetRequest={wallGetRequest}
-					/>
-				} />
+						/>
+					} />
 			</div>
 		)
 	}

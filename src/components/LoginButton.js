@@ -12,7 +12,8 @@ import React from 'react'
 // }
 
 const LoginButton = ({ onLogin }) => (
-	<button onClick={onLogin}>{localStorage.isLoggedIn === "false" ? 'Login' : 'Logout'}</button>
+	<button onClick={onLogin} className='login-button'>{localStorage.isLoggedIn === "false" ? 'Log in' : 'Log out'}</button>
+	
 )
 
 export default LoginButton

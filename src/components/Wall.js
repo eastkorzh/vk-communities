@@ -1,4 +1,5 @@
 import React from 'react'
+import './Wall.sass'
 
 class Wall extends React.Component {
     componentDidMount() {
@@ -19,11 +20,30 @@ class Wall extends React.Component {
             }
         }
 
+        const takeDate = (ms) => {
+            return new Date(ms).toLocaleString()
+        }
+
         if (state.posts[0]) {
             return state.posts.map(item => (
-                <div key={item.id}>
+                <div key={item.id} className='wall-post'>
+                    <div>{takeDate(item.date*1000)}</div>
                     <div>{item.text}</div>
                     <div>{takePhoto(item)}</div>
+                    <div className='post-info'>
+                        <div>
+                            <div className='like-svg'/>
+                            <div>{item.likes.count}</div>
+                        </div>
+                        <div>
+                            <div className='reposts-svg'/>
+                            <div>{item.reposts.count}</div>
+                        </div>
+                        <div>
+                            <div className='view-svg'/>
+                            <div>{item.views.count}</div>
+                        </div>
+                    </div>
                 </div>
             ))
         }
@@ -33,7 +53,7 @@ class Wall extends React.Component {
         //const { state } = this.props
 
         return (
-            <div>{this.renderPosts()}</div>
+            <div className='wall-grid'>{this.renderPosts()}</div>
         )
     }
 }
