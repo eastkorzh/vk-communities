@@ -1,4 +1,4 @@
-import { put, takeLatest, all, call } from 'redux-saga/effects'
+import { put, takeLatest, all } from 'redux-saga/effects'
 
 import { 
 	communitiesGetRequest, 
@@ -6,7 +6,10 @@ import {
 	communitiesGetFail, 
 	wallGetRequest, 
 	wallGetSuccess, 
-    wallGetFail 
+    wallGetFail,
+    getCommentsRequest,
+    getCommentsSuccess,
+    getCommentsFail,
 } from '../actions/communitiesActions'
 import { apiCall } from '../api'
 
@@ -36,7 +39,7 @@ function* onWallGetRequest(action) {
     try {
         const r = yield apiCall({ 
             method: 'wall.get', 
-            params: {domain: action.name, count: 20, extended: 1} 
+            params: {domain: action.pickedGroup.screen_name, count: 20, extended: 1} 
         })
         
         if (!r.error) {
@@ -53,9 +56,31 @@ function* watchOnWallGetRequest() {
     yield takeLatest(wallGetRequest().type, onWallGetRequest)
 }
 
+function* onGetCommentsRequest(action) {
+    try {
+        const r = yield apiCall({
+            method: 'wall.getComments',
+            params: {owner_id: action.owner_id, post_id: action.post_id, need_likes: 1, count: 999, extended: 1}
+        })
+
+        if (!r.error) {
+            yield put(getCommentsSuccess(r.response))
+        } else {
+            throw new Error(r.error.error_msg)
+        }
+    } catch (error) {
+        yield put(getCommentsFail(error))
+    }
+}  
+
+function* watchOnGetCommentsRequest() {
+    yield takeLatest(getCommentsRequest().type, onGetCommentsRequest)
+}
+
 export default function* communitiesSaga() {
     yield all([
         watchRenderCommunities(), 
-        watchOnWallGetRequest()
+        watchOnWallGetRequest(),
+        watchOnGetCommentsRequest()
     ])
 }

@@ -9,7 +9,7 @@ class Communities extends React.Component {
 
         return communities.map(item => (
             <div key={item.id} className='group-card'>
-                <div onClick={() => wallGetRequest(item.screen_name)}>
+                <div onClick={() => wallGetRequest(item)}>
                     <Link to={`/wall` }>
                         <img src={item.photo_100} alt={`${item.name}`}/>
                     </Link>
