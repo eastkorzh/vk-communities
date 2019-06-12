@@ -39,10 +39,11 @@ class Wall extends React.Component {
 			return state.posts.map(item => (
 				<Link to={`comments`} key={item.id} >
 					<div onClick={() => {
-						console.log(item.owner_id, item.id)
-						sessionStorage.owner_id = item.owner_id
-						sessionStorage.item_id = item.id
-						getCommentsRequest(sessionStorage.owner_id, sessionStorage.item_id)
+						if (item.comments.count) {
+							sessionStorage.owner_id = item.owner_id
+							sessionStorage.item_id = item.id
+							getCommentsRequest(sessionStorage.owner_id, sessionStorage.item_id)
+						}
 						}} className='wall-post'>
 						<div className='post-date'>{takeDate(item.date*1000)}</div>
 						<div className='post-text'>{item.text}</div>
@@ -77,10 +78,10 @@ class Wall extends React.Component {
 	}
 
 	render() {
-		//const { state } = this.props
+		const { state } = this.props
 
 		return (
-			<div className='wall-grid'>{this.renderPosts()}</div>
+			<div className='wall-grid' style={{ opacity: state.isFetching ? 0.5 : 1 }}>{this.renderPosts()}</div>
 		)
 	}
 }

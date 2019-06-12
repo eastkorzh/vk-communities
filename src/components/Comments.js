@@ -1,11 +1,12 @@
 import React from 'react'
 import './Comments.sass'
+import CommentCard from './CommentCard'
 
 class Comments extends React.Component {
-    componentDidUpdate() {
-        const { state, getCommentsRequest, props, wallGetRequest } = this.props
+	componentDidUpdate() {
+		const { state, getCommentsRequest, props, wallGetRequest } = this.props
 
-        const takePickedGroup = (screen_name) => {
+		const takePickedGroup = (screen_name) => {
 			const groups = state.communities
 
 			for (let i=0; groups.length > i; i++) {
@@ -18,57 +19,42 @@ class Comments extends React.Component {
 			
 			wallGetRequest(pickedGroup)
 		}
-        
-        if (!state.comments.count && !state.isFetching) {
-            getCommentsRequest(sessionStorage.owner_id, sessionStorage.item_id)
-        }
-    }
+		
+		if (!state.comments.count && !state.isFetching) {
+			getCommentsRequest(sessionStorage.owner_id, sessionStorage.item_id)
+		}
+	}
 
-    renderComments() {
-        const { state } = this.props
+	renderComments() {
+		const { state } = this.props
+		
+		return state.comments.items.map( item => {
+			return (
+				<div key={item.id} className='wrapper'>
+					<CommentCard item={item} state={state}/>
 
-        
-        const takeProfile = (id) => {
-            const profiles = state.comments.profiles
-            
-            for (let i=0; i < profiles.length; i++) {
-                if (profiles[i].id === id) return profiles[i]
-            }
-        }
-        
-        return state.comments.items.map( item => {
-            // eslint-disable-next-line array-callback-return
-            if (item.deleted) return
-            const profile = takeProfile(item.from_id)
+					<div className='thread'>
+						{(item.thread.count !== 0) && item.thread.items.map(
+							item => (
+								<CommentCard key={item.id} item={item} state={state}/>
+							)
+						)}
+					</div>
+				</div>
+			)
+		})
+	}
+	
+	render() {
+		const { state } = this.props
 
-            return (
-                <div key={item.id} className='comment-card'>
-                    <a href={profile && 'https://vk.com/id'+profile.id}>
-                        <img src={profile && profile.photo_50} alt=''/>
-                    </a>
-                    <div className='comment'>
-                        <a href={profile && 'https://vk.com/id'+profile.id}>{profile && (profile.first_name + ' ' + profile.last_name)}</a>
-                        <div>{item.text}</div>
-                        <div className='comment-like'>
-                            <div className='like'/>
-                            <div>{item.likes && item.likes.count}</div>
-                        </div>
-                    </div>
-                </div>
-            )
-        })
-    }
-    
-    render() {
-        const { state } = this.props
-
-        return(
-            <div className='comments-grid'>
-                {(state.comments.items && state.comments.profiles )&&
-                    this.renderComments()}
-            </div>
-        )
-    }
+		return(
+			<div className='comments-grid' style={{ opacity: state.isFetching ? 0.2 : 1 }}>
+				{(state.comments.items && state.comments.profiles )&&
+					this.renderComments()}
+			</div>
+		)
+	}
 }
 
 export default Comments

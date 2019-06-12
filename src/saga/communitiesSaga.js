@@ -60,7 +60,7 @@ function* onGetCommentsRequest(action) {
     try {
         const r = yield apiCall({
             method: 'wall.getComments',
-            params: {owner_id: action.owner_id, post_id: action.post_id, need_likes: 1, count: 999, extended: 1}
+            params: {owner_id: action.owner_id, post_id: action.post_id, need_likes: 1, count: 100, thread_items_count: 10, extended: 1}
         })
 
         if (!r.error) {
@@ -69,6 +69,7 @@ function* onGetCommentsRequest(action) {
             throw new Error(r.error.error_msg)
         }
     } catch (error) {
+        console.log('onGetCommentsRequest: ',error)
         yield put(getCommentsFail(error))
     }
 }  

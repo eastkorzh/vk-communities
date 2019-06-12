@@ -4,11 +4,11 @@ import './Communities.sass'
 
 class Communities extends React.Component {
     renderCommunities() {
-        const { wallGetRequest } = this.props
-        const communities = this.props.state.communities
+        const { wallGetRequest, state } = this.props
+        const communities = state.communities
 
         return communities.map(item => (
-            <div key={item.id} className='group-card'>
+            <div key={item.id} className='group-card' style={{ opacity: state.isFetching ? 0.5 : 1 }}>
                 <div onClick={() => wallGetRequest(item)}>
                     <Link to={`/${item.screen_name}/wall` }>
                         <img src={item.photo_100} alt={`${item.name}`}/>
