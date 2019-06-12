@@ -56,21 +56,26 @@ class App extends React.Component {
 						/>
 					}
 				</div>
-				<Route path='/wall' render={
-					() => <Back 
+				<Route path='/:id/' render={
+					(props) => <Back 
 						state={state}
+						match={props.match}
 					/>
 				} />
-				<Route exact path='/wall' render={
-					() => <Wall 
+				<Route path='/:id/wall' render={
+					(props) => <Wall 
 						state={state}
 						wallGetRequest={rest.wallGetRequest}
 						getCommentsRequest={rest.getCommentsRequest}
+						props={props}
 					/>
 				} />
-				<Route path='/wall/comments' render={
-					() => <Comments 
+				<Route path='/:id/comments' render={
+					(props) => <Comments 
 						state={state}
+						wallGetRequest={rest.wallGetRequest}
+						getCommentsRequest={rest.getCommentsRequest}
+						props={props}
 					/>
 				} />
 			</div>

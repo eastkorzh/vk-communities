@@ -6,10 +6,10 @@ class Back extends React.Component {
     render
 
     render() {
-        const { state } = this.props
+        const { state, match } = this.props
         return(
             <div className='back'>
-                <Route exact path='/wall'
+                <Route path='/:id/wall'
                     render = {
                         () => {
                             return(
@@ -32,12 +32,12 @@ class Back extends React.Component {
                         }
                     }
                 />
-                <Route exact path='/wall/comments'
+                <Route path='/:id/comments'
                     render = {
                         () => {
                             return(
                                 <>
-                                <Link to={'/wall'}>
+                                <Link to={`/${match.params.id}/wall`}>
                                     <div className='back-svg'/>
                                 </Link>
                                 <div className='back-img'>
