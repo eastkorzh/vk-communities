@@ -4,15 +4,15 @@ import { Route } from 'react-router-dom'
 
 import { 
 	loginRequest, 
-	loginButtonMounted,
 } from '../actions/LoginActions'
-import { communitiesGetRequest, wallGetRequest } from '../actions/communitiesActions'
+import { communitiesGetRequest, wallGetRequest, getCommentsRequest } from '../actions/communitiesActions'
 import LoginButton from '../components/LoginButton'
 import ProfileCard from '../components/ProfileCard'
 import Communities from '../components/Communities'
 import Wall from '../components/Wall'
+import Back from '../components/Back'
+import Comments from '../components/Comments'
 
-//localStorage.setItem('isLoggedIn', false)
 
 class App extends React.Component {
 	componentDidMount() {
@@ -26,10 +26,8 @@ class App extends React.Component {
 
 	render() {
 		const { 
-			state, 
-			onLogin, 
-			setLoginButtonMounted,
-			wallGetRequest,
+			state,
+			...rest
 		} = this.props
 
 		return (
@@ -42,26 +40,44 @@ class App extends React.Component {
 					}
 					<LoginButton 
 						state={state} 
-						onLogin={onLogin}
-						setLoginButtonMounted={setLoginButtonMounted}
+						onLogin={rest.onLogin}
 					/>
 				</div>
+				<Route exact path='/' render={
+					() => <h1 className='groups-h1'>Группы</h1>
+				} />
 				<div className='groups-grid'>
 					{localStorage.isLoggedIn === 'true' &&
 						<Route exact path='/' render={
 							() => <Communities
 								state={state}
-								wallGetRequest={wallGetRequest}
+								wallGetRequest={rest.wallGetRequest}
 							/>}
 						/>
 					}
 				</div>
-					<Route path='/wall' render={
-						() => <Wall 
-							state={state}
-							wallGetRequest={wallGetRequest}
-						/>
-					} />
+				<Route path='/:id/' render={
+					(props) => <Back 
+						state={state}
+						match={props.match}
+					/>
+				} />
+				<Route path='/:id/wall' render={
+					(props) => <Wall 
+						state={state}
+						wallGetRequest={rest.wallGetRequest}
+						getCommentsRequest={rest.getCommentsRequest}
+						props={props}
+					/>
+				} />
+				<Route path='/:id/comments' render={
+					(props) => <Comments 
+						state={state}
+						wallGetRequest={rest.wallGetRequest}
+						getCommentsRequest={rest.getCommentsRequest}
+						props={props}
+					/>
+				} />
 			</div>
 		)
 	}
@@ -75,11 +91,11 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
 	onLogin: () => dispatch(loginRequest),
 
-	setLoginButtonMounted: () => dispatch(loginButtonMounted),
-
 	communitiesGetRequest: () => dispatch(communitiesGetRequest),
 
 	wallGetRequest: (name) => dispatch(wallGetRequest(name)),
+
+	getCommentsRequest: (owner_id, post_id) => dispatch(getCommentsRequest(owner_id, post_id)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

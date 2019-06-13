@@ -1,4 +1,4 @@
-import { put, takeLatest, all, call } from 'redux-saga/effects'
+import { put, takeLatest, all } from 'redux-saga/effects'
 import { 
 	loginRequest,
 	loginSuccess, 
@@ -23,7 +23,7 @@ export function* onLogin() {
 					} else {
 						reject(response)
 					}
-				}, 8192)
+				}, 270336)
 			})
 		)
 

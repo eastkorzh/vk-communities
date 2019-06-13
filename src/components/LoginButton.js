@@ -12,7 +12,7 @@ import React from 'react'
 // }
 
 const LoginButton = ({ onLogin }) => (
-	<button onClick={onLogin} className='login-button'>{localStorage.isLoggedIn === "false" ? 'Log in' : 'Log out'}</button>
+	<button onClick={onLogin} className='login-button'>{localStorage.isLoggedIn === "true" ? 'Log out' : 'Log in'}</button>
 	
 )
 

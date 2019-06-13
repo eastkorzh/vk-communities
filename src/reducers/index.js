@@ -14,14 +14,19 @@ import {
 	WALL_GET_REQUEST,
 	WALL_GET_SUCCESS,
 	WALL_GET_FAIL,
+	GET_COMMENTS_REQUEST,
+	GET_COMMENTS_SUCCESS,
+	GET_COMMENTS_FAIL,
+
 } from '../actions/communitiesActions'
 
 export default function rootReducer(state = {
 	isFetching: false,
 	errors: [],
 	communities: [],
-	name: '',
+	pickedGroup: '',
 	posts: [],
+	comments: [],
 }, action) {
 	switch (action.type) {
 		case LOGIN_REQUEST:
@@ -76,7 +81,8 @@ export default function rootReducer(state = {
 			return {
 				...state,
 				isFetching: true,
-				name: action.name,
+				pickedGroup: action.pickedGroup,
+				comments: []
 			}
 		case WALL_GET_SUCCESS:
 			return {
@@ -85,6 +91,23 @@ export default function rootReducer(state = {
 				posts: action.response.items
 			}
 		case WALL_GET_FAIL:
+			return {
+				...state,
+				isFetching: false,
+				errors: state.errors.concat(...state.errors, action.error)
+			}
+		case GET_COMMENTS_REQUEST:
+			return {
+				...state,
+				isFetching: true,
+			}
+		case GET_COMMENTS_SUCCESS:
+			return {
+				...state,
+				isFetching: false,
+				comments: action.response
+			}
+		case GET_COMMENTS_FAIL:
 			return {
 				...state,
 				isFetching: false,

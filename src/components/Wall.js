@@ -1,61 +1,89 @@
 import React from 'react'
 import './Wall.sass'
+import { Link } from 'react-router-dom'
 
 class Wall extends React.Component {
-    componentDidMount() {
-        const { state, wallGetRequest } = this.props
+	componentDidUpdate() {
+		const { state, props, wallGetRequest } = this.props
 
-        if (!state.posts[0]) {
-            wallGetRequest(state.name)
-        }
-    }
+		const takePickedGroup = (screen_name) => {
+			const groups = state.communities
 
-    renderPosts() {
-        const { state } = this.props
+			for (let i=0; groups.length > i; i++) {
+				if (groups[i].screen_name === screen_name) return groups[i] 
+			}
+		}
 
-        const takePhoto = (item) => {
-            if (!item.attachments) return
-            if (item.attachments[0].type === 'photo') {
-                return <img src={item.attachments[0].photo.sizes[0].url} alt=''/>
-            }
-        }
+		if (!state.pickedGroup.screen_name && state.communities[0] && !state.isFetching) {
+			const pickedGroup = takePickedGroup(props.match.params.id)
+			
+			wallGetRequest(pickedGroup)
+		}
+	}
 
-        const takeDate = (ms) => {
-            return new Date(ms).toLocaleString()
-        }
+	renderPosts() {
+		const { state, getCommentsRequest } = this.props
 
-        if (state.posts[0]) {
-            return state.posts.map(item => (
-                <div key={item.id} className='wall-post'>
-                    <div>{takeDate(item.date*1000)}</div>
-                    <div>{item.text}</div>
-                    <div>{takePhoto(item)}</div>
-                    <div className='post-info'>
-                        <div>
-                            <div className='like-svg'/>
-                            <div>{item.likes.count}</div>
-                        </div>
-                        <div>
-                            <div className='reposts-svg'/>
-                            <div>{item.reposts.count}</div>
-                        </div>
-                        <div>
-                            <div className='view-svg'/>
-                            <div>{item.views.count}</div>
-                        </div>
-                    </div>
-                </div>
-            ))
-        }
-    }
+		const takePhoto = (item) => {
+			if (!item.attachments) return
+			if (item.attachments[0].type === 'photo' && item.attachments[0].photo.sizes[4]) {
+				return <img src={item.attachments[0].photo.sizes[4].url} alt='' className='post-img'/>
+			}
+		}
 
-    render() {
-        //const { state } = this.props
+		const takeDate = (ms) => {
+			return new Date(ms).toLocaleString()
+		}
 
-        return (
-            <div className='wall-grid'>{this.renderPosts()}</div>
-        )
-    }
+		if (!state.isFatching && state.posts[0]) {
+			return state.posts.map(item => (
+				<Link to={`comments`} key={item.id} >
+					<div onClick={() => {
+						if (item.comments.count) {
+							sessionStorage.owner_id = item.owner_id
+							sessionStorage.item_id = item.id
+							getCommentsRequest(sessionStorage.owner_id, sessionStorage.item_id)
+						}
+						}} className='wall-post'>
+						<div className='post-date'>{takeDate(item.date*1000)}</div>
+						<div className='post-text'>{item.text}</div>
+						<div className='post-img-div'>
+							{takePhoto(item)}
+						</div>
+						<div className='post-info'>
+							<div>
+								<div className='like-svg'/>
+								<div>{item.likes.count}</div>
+							</div>
+							{item.comments && 
+							<div>
+								<div className='comments-svg'/>
+								<div>{item.comments.count}</div>
+							</div>}
+							<div>
+								<div className='reposts-svg'/>
+								<div>{item.reposts.count}</div>
+							</div>
+							{item.views &&
+							<div className='views'>
+								<div className='view-svg'/>
+								<div>{item.views.count}</div>
+							</div>
+							}
+						</div>
+					</div>
+				</Link>
+			))
+		}
+	}
+
+	render() {
+		const { state } = this.props
+
+		return (
+			<div className='wall-grid' style={{ opacity: state.isFetching ? 0.5 : 1 }}>{this.renderPosts()}</div>
+		)
+	}
 }
 
 export default Wall
