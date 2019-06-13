@@ -24,11 +24,34 @@ class Wall extends React.Component {
 	renderPosts() {
 		const { state, getCommentsRequest } = this.props
 
-		const takePhoto = (item) => {
+		const takePhoto = (item, size) => {
 			if (!item.attachments) return
-			if (item.attachments[0].type === 'photo' && item.attachments[0].photo.sizes[4]) {
-				return <img src={item.attachments[0].photo.sizes[4].url} alt='' className='post-img'/>
+			
+			let photos = []
+	
+			for (let a of item.attachments) {
+				if (a.type === 'photo') photos.push(a.photo)
 			}
+	
+			if (!photos.length) return
+	
+			const filteredPhotos =  photos.map(i => {
+				let result = {}
+	
+				if (i.sizes[size]) {
+					result = i.sizes[size]	
+				} else {
+					for (let j=size; j>0; j--) {
+						if (i.sizes[j]) return i.sizes[j]
+					}
+				}
+				
+				return result
+			})
+			
+			return(
+				<img src={filteredPhotos[0].url} alt='' className='attached-img'/>
+			)
 		}
 
 		const takeDate = (ms) => {
@@ -48,7 +71,7 @@ class Wall extends React.Component {
 						<div className='post-date'>{takeDate(item.date*1000)}</div>
 						<div className='post-text'>{item.text}</div>
 						<div className='post-img-div'>
-							{takePhoto(item)}
+							{takePhoto(item, 4)}
 						</div>
 						<div className='post-info'>
 							<div>
