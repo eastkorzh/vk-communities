@@ -48,7 +48,7 @@ const CommentCard = ({item, state}) => {
 	}
 
 	const handleText = (text) => {
-		if (text.slice(0, 1) !== '[') return text
+		if (!text || text.slice(0, 1) !== '[') return text
 
 		const start = text.indexOf('[')
 		const stop = text.indexOf(']')
@@ -59,19 +59,19 @@ const CommentCard = ({item, state}) => {
 		return (
 			<>
 				<a href={`https://vk.com/${id}`}>{name}</a>
-				<p>{text.slice(stop + 1)}</p>
+				<>{text.slice(stop + 1)}</>
 			</>
 		)
 	}
 
 	handleText(item.text)
 
-	if (item.deleted) return 'Comment delited'
+	if (item.deleted) return <div className='delited-comment'>Comment delited</div>
 	const profile = takeProfile(item.from_id)
 
 	return(
 		<>
-		{profile.type !== 'page' ? (
+		{!profile.type ? (
 			<div className='comment-card'>
 				<a href={profile && 'https://vk.com/id'+profile.id}>
 					<img src={profile && profile.photo_50} alt=''/>
