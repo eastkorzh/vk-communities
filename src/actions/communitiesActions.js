@@ -56,3 +56,8 @@ export const getCommentsFail = (errors) => ({
     type: GET_COMMENTS_FAIL,
     errors,
 })
+
+export const sortComments = (result) => ({
+    type: 'SORT_COMMENTS',
+    result,
+})

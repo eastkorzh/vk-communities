@@ -113,6 +113,11 @@ export default function rootReducer(state = {
 				isFetching: false,
 				errors: state.errors.concat(...state.errors, action.error)
 			}
+		case 'SORT_COMMENTS':
+			return {
+				...state,
+				comments: action.result
+			}
 		default:
 			return state
 	}
