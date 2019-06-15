@@ -57,20 +57,25 @@ class App extends React.Component {
 						/>
 					}
 				</div>
-				<Route path='/:id/' render={
-					(props) => (
-						<div className='top-pannel'>
+
+				<div className='top-pannel'>
+					<Route path='/:id/' render={
+						(props) => (
 							<Back 
-								state={state}
-								match={props.match}
+							state={state}
+							match={props.match}
 							/>
-							<Sort 
-								state={state}
-								sortComments={rest.sortComments}
-							/>
-						</div>
-					)
-				} />
+							)
+						} />
+						<Route path='/:id/comments' render={
+							() => (
+								<Sort 
+									state={state}
+									sortComments={rest.sortComments}
+								/>
+							)
+						}/>
+				</div>
 				<Route path='/:id/wall' render={
 					(props) => <Wall 
 						state={state}

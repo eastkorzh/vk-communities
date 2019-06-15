@@ -18,11 +18,8 @@ class Post extends Component {
 	resizeComponent() {
 		let postHeight = this.wallPost.current.getBoundingClientRect().height
 		let k = Math.ceil((postHeight + 5) / 5 ) + 1
-		
-		//this.postRef.current.style.gridRowEnd = `span ${k}`
-		this.setState({style: { gridRowEnd: `span ${k}`}})	
 
-		console.log(this.state.style.gridRowEnd, this.wallPost.current.getBoundingClientRect().height)
+		this.setState({style: { gridRowEnd: `span ${k}`}})	
 	}
 
 	componentDidMount() {
