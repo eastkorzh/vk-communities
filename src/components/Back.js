@@ -24,7 +24,7 @@ class Back extends React.Component {
                                 </div>
                                 <div className='back-h1'>
                                     {state.pickedGroup &&
-                                        <h1>{state.pickedGroup.name}</h1>
+                                        <h1>{state.pickedGroup.name.slice(0, 26)}</h1>
                                     }
                                 </div>
                                 </>

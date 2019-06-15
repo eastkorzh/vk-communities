@@ -5,13 +5,14 @@ import { Route } from 'react-router-dom'
 import { 
 	loginRequest, 
 } from '../actions/LoginActions'
-import { communitiesGetRequest, wallGetRequest, getCommentsRequest } from '../actions/communitiesActions'
+import { communitiesGetRequest, wallGetRequest, getCommentsRequest, sortComments } from '../actions/communitiesActions'
 import LoginButton from '../components/LoginButton'
 import ProfileCard from '../components/ProfileCard'
 import Communities from '../components/Communities'
 import Wall from '../components/Wall'
 import Back from '../components/Back'
 import Comments from '../components/Comments'
+import Sort from '../components/Sort'
 
 
 class App extends React.Component {
@@ -57,10 +58,18 @@ class App extends React.Component {
 					}
 				</div>
 				<Route path='/:id/' render={
-					(props) => <Back 
-						state={state}
-						match={props.match}
-					/>
+					(props) => (
+						<div className='top-pannel'>
+							<Back 
+								state={state}
+								match={props.match}
+							/>
+							<Sort 
+								state={state}
+								sortComments={rest.sortComments}
+							/>
+						</div>
+					)
 				} />
 				<Route path='/:id/wall' render={
 					(props) => <Wall 
@@ -96,6 +105,8 @@ const mapDispatchToProps = (dispatch) => ({
 	wallGetRequest: (name) => dispatch(wallGetRequest(name)),
 
 	getCommentsRequest: (owner_id, post_id) => dispatch(getCommentsRequest(owner_id, post_id)),
+
+	sortComments: (result) => dispatch(sortComments(result)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
