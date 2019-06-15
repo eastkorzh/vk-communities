@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/static/css/main.6b415653.chunk.css",
-    "main.js": "/static/js/main.e6ff3120.chunk.js",
-    "main.js.map": "/static/js/main.e6ff3120.chunk.js.map",
-    "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
-    "runtime~main.js.map": "/static/js/runtime~main.a8a9905a.js.map",
-    "static/js/2.8dd9855f.chunk.js": "/static/js/2.8dd9855f.chunk.js",
-    "static/js/2.8dd9855f.chunk.js.map": "/static/js/2.8dd9855f.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.142bcea5e805d1180682d7e3f0762d44.js": "/precache-manifest.142bcea5e805d1180682d7e3f0762d44.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/main.6b415653.chunk.css.map": "/static/css/main.6b415653.chunk.css.map",
-    "static/media/Back.sass": "/static/media/back_24.d88ec05c.svg",
-    "static/media/Post.sass": "/static/media/view_24.7d449b62.svg",
-    "static/media/Comments.sass": "/static/media/like_16.d6f67df9.svg"
+    "main.css": "/eastkorzh/test-redux/static/css/main.149d9a2b.chunk.css",
+    "main.js": "/eastkorzh/test-redux/static/js/main.8f0d781f.chunk.js",
+    "main.js.map": "/eastkorzh/test-redux/static/js/main.8f0d781f.chunk.js.map",
+    "runtime~main.js": "/eastkorzh/test-redux/static/js/runtime~main.014c824d.js",
+    "runtime~main.js.map": "/eastkorzh/test-redux/static/js/runtime~main.014c824d.js.map",
+    "static/js/2.67f24a2e.chunk.js": "/eastkorzh/test-redux/static/js/2.67f24a2e.chunk.js",
+    "static/js/2.67f24a2e.chunk.js.map": "/eastkorzh/test-redux/static/js/2.67f24a2e.chunk.js.map",
+    "index.html": "/eastkorzh/test-redux/index.html",
+    "precache-manifest.5b32b9c72c2318fde9d18d970b5258c7.js": "/eastkorzh/test-redux/precache-manifest.5b32b9c72c2318fde9d18d970b5258c7.js",
+    "service-worker.js": "/eastkorzh/test-redux/service-worker.js",
+    "static/css/main.149d9a2b.chunk.css.map": "/eastkorzh/test-redux/static/css/main.149d9a2b.chunk.css.map",
+    "static/media/Back.sass": "/eastkorzh/test-redux/static/media/back_24.d88ec05c.svg",
+    "static/media/Post.sass": "/eastkorzh/test-redux/static/media/view_24.7d449b62.svg",
+    "static/media/Comments.sass": "/eastkorzh/test-redux/static/media/like_16.d6f67df9.svg"
   }
 }
