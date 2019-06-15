@@ -5,7 +5,7 @@ import './Sort.sass'
 class Sort extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = {isSorted: false, originalSort: {}}
+		this.state = {picked: 0, isSorted: false, originalSort: {}}
 	}
 
 	sortCommentsFunction(comments) {
@@ -28,8 +28,10 @@ class Sort extends React.Component {
 		this.setState({isSorted: !this.state.isSorted})
 	}
 
+
 	render() {
 		const { state } = this.props
+
 		return(
 			<div>
 				<Route path='/:id/comments' render={() =>(
