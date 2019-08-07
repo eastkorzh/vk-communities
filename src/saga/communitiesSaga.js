@@ -6,29 +6,29 @@ import {
 	communitiesGetFail, 
 	wallGetRequest, 
 	wallGetSuccess, 
-    wallGetFail,
-    getCommentsRequest,
-    getCommentsSuccess,
-    getCommentsFail,
+	wallGetFail,
+	getCommentsRequest,
+	getCommentsSuccess,
+	getCommentsFail,
 } from '../actions/communitiesActions'
 import { apiCall } from '../api'
 
 function* renderCommunities() {
-    try {
-        const r = yield apiCall({ 
-            method: 'groups.get', 
-            params: {extended: 1, count: 999, fields: 'activity,members_count'} 
-        })
-        
-        if (!r.error) {
-            yield put(communitiesGetSuccess(r.response))
-        } else {
-            throw new Error(r.error.error_msg)
-        }
-    } catch (error) {
-        yield put(communitiesGetFail(error))
-        yield localStorage.isLoggedIn = 'false'
-    }
+	try {
+		const r = yield apiCall({ 
+			method: 'groups.get', 
+			params: {extended: 1, count: 999, fields: 'activity,members_count'} 
+		})
+		
+		if (!r.error) {
+			yield put(communitiesGetSuccess(r.response))
+		} else {
+			throw new Error(r.error.error_msg)
+		}
+	} catch (error) {
+		yield put(communitiesGetFail(error))
+		yield localStorage.isLoggedIn = 'false'
+	}
 }
 
 function* watchRenderCommunities() {
@@ -36,52 +36,52 @@ function* watchRenderCommunities() {
 }
 
 function* onWallGetRequest(action) {
-    try {
-        const r = yield apiCall({ 
-            method: 'wall.get', 
-            params: {domain: action.pickedGroup.screen_name, count: 20, extended: 1} 
-        })
-        
-        if (!r.error) {
-            yield put(wallGetSuccess(r.response))
-        } else {
-            throw new Error(r.error.error_msg)
-        }
-    } catch (error) {
-        yield put(wallGetFail(error))
-    }
+	try {
+		const r = yield apiCall({ 
+			method: 'wall.get', 
+			params: {domain: action.pickedGroup.screen_name, count: 20, extended: 1} 
+		})
+		
+		if (!r.error) {
+			yield put(wallGetSuccess(r.response))
+		} else {
+			throw new Error(r.error.error_msg)
+		}
+	} catch (error) {
+		yield put(wallGetFail(error))
+	}
 }
 
 function* watchOnWallGetRequest() {
-    yield takeLatest(wallGetRequest().type, onWallGetRequest)
+	yield takeLatest(wallGetRequest().type, onWallGetRequest)
 }
 
 function* onGetCommentsRequest(action) {
-    try {
-        const r = yield apiCall({
-            method: 'wall.getComments',
-            params: {owner_id: action.owner_id, post_id: action.post_id, need_likes: 1, count: 100, thread_items_count: 10, extended: 1}
-        })
+	try {
+		const r = yield apiCall({
+			method: 'wall.getComments',
+			params: {owner_id: action.owner_id, post_id: action.post_id, need_likes: 1, count: 100, thread_items_count: 10, extended: 1}
+		})
 
-        if (!r.error) {
-            yield put(getCommentsSuccess(r.response))
-        } else {
-            throw new Error(r.error.error_msg)
-        }
-    } catch (error) {
-        console.log('onGetCommentsRequest: ',error)
-        yield put(getCommentsFail(error))
-    }
+		if (!r.error) {
+			yield put(getCommentsSuccess(r.response))
+		} else {
+			throw new Error(r.error.error_msg)
+		}
+	} catch (error) {
+		console.log('onGetCommentsRequest: ',error)
+		yield put(getCommentsFail(error))
+	}
 }  
 
 function* watchOnGetCommentsRequest() {
-    yield takeLatest(getCommentsRequest().type, onGetCommentsRequest)
+	yield takeLatest(getCommentsRequest().type, onGetCommentsRequest)
 }
 
 export default function* communitiesSaga() {
-    yield all([
-        watchRenderCommunities(), 
-        watchOnWallGetRequest(),
-        watchOnGetCommentsRequest()
-    ])
+	yield all([
+		watchRenderCommunities(), 
+		watchOnWallGetRequest(),
+		watchOnGetCommentsRequest()
+	])
 }

@@ -32,31 +32,11 @@ export function* onLogin() {
 		)
 	}
 
-	// const logout = () => {
-	// 	const logoutRequest = () => (
-	// 		new Promise((resolve, reject) => {
-	// 			// eslint-disable-next-line no-undef
-	// 			VK.Auth.logout((response) => {
-	// 				if (response.session) {
-	// 					resolve(response)
-	// 				} else {
-	// 					reject(response)
-	// 				}
-	// 			})
-	// 		})
-	// 	)
-
-	// 	return logoutRequest().then(
-	// 		response => response
-	// 	)
-	// }
-
 	try {
 		let r = ''
 		if (localStorage.isLoggedIn === 'false' || !localStorage.isLoggedIn) {
 			r = yield login()
 		} else {
-			// yield logout()
 			localStorage.isLoggedIn = 'false'
 		}
 

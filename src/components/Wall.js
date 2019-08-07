@@ -3,10 +3,6 @@ import './Wall.sass'
 import Post from './Post'
 
 class Wall extends React.Component {
-	componentDidMount() {
-		//console.log(this.content)
-	}
-
 	componentDidUpdate() {
 		const { state, props, wallGetRequest } = this.props
 
@@ -27,40 +23,6 @@ class Wall extends React.Component {
 
 	renderPosts() {
 		const { state, getCommentsRequest } = this.props
-
-		// const takePhoto = (item, size) => {
-		// 	if (!item.attachments) return
-			
-		// 	let photos = []
-	
-		// 	for (let a of item.attachments) {
-		// 		if (a.type === 'photo') photos.push(a.photo)
-		// 	}
-	
-		// 	if (!photos.length) return
-	
-		// 	const filteredPhotos =  photos.map(i => {
-		// 		let result = {}
-	
-		// 		if (i.sizes[size]) {
-		// 			result = i.sizes[size]	
-		// 		} else {
-		// 			for (let j=size; j>0; j--) {
-		// 				if (i.sizes[j]) return i.sizes[j]
-		// 			}
-		// 		}
-				
-		// 		return result
-		// 	})
-			
-		// 	return(
-		// 		<img src={filteredPhotos[0].url} alt='' className='attached-img'/>
-		// 	)
-		// }
-
-		// const takeDate = (ms) => {
-		// 	return new Date(ms).toLocaleString()
-		// }
 
 		if (!state.isFatching && state.posts[0]) {
 
