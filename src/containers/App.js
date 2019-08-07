@@ -45,7 +45,15 @@ class App extends React.Component {
 					/>
 				</div>
 				<Route exact path='/' render={
-					() => <h1 className='groups-h1'>Группы</h1>
+					() => {
+						if (localStorage.isLoggedIn === 'true') {
+							return (
+								<h1 className='groups-h1'>Группы</h1>
+							)
+						} else {
+							return <h1 className='login-h1'>Войдите чтобы продолжить</h1>
+						}
+					}
 				} />
 				<div className='groups-grid'>
 					{localStorage.isLoggedIn === 'true' &&
